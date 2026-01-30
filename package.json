@@ -1,5 +1,5 @@
 {
-  "name": "base-checker-backend",
+  "name": "base-dummy-airdrop-checker",
   "version": "1.0.0",
   "main": "server.js",
   "dependencies": {
