@@ -9,9 +9,24 @@ export default async function handler(req, res) {
 
   const { address } = req.query;
   
+  // Debug logging
+  console.log('Received address:', address);
+  console.log('Full query:', req.query);
+  
   // 1. Basic Validation
-  if (!address || !/^0x[a-fA-F0-9]{40}$/.test(address)) {
-    return res.status(400).json({ error: "Invalid wallet address format" });
+  if (!address) {
+    return res.status(400).json({ 
+      error: "No wallet address provided",
+      hint: "Add ?address=0x... to your URL" 
+    });
+  }
+  
+  if (!/^0x[a-fA-F0-9]{40}$/.test(address)) {
+    return res.status(400).json({ 
+      error: "Invalid wallet address format",
+      received: address,
+      hint: "Address must be 42 characters starting with 0x"
+    });
   }
 
   const API_KEY = process.env.BASESCAN_API_KEY || 'JHPSPADURZKEPAUJMAPSS2P2VV38ITP9Z2';
@@ -49,3 +64,10 @@ export default async function handler(req, res) {
     res.status(500).json({ error: "Server error fetching on-chain data" });
   }
 }
+```
+
+### Fix 3: Test with a Valid Address
+
+Try this test URL with a known valid Base address:
+```
+https://base-dummy-airdrop-checker.vercel.app/api/check-wallet?address=0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb
