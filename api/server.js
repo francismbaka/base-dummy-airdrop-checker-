@@ -16,7 +16,7 @@ app.get('/api/check-wallet', async (req, res) => {
   const USDC_CONTRACT = '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913';
 
   try {
-    // 2. Concurrent fetches for ETH and USDC
+    // 2. Concurrent fetches for ETH and USDC - FIXED SYNTAX
     const [ethRes, usdcRes] = await Promise.all([
       fetch(`https://api.basescan.org/api?module=account&action=txlist&address=${address}&apikey=${API_KEY}`),
       fetch(`https://api.basescan.org/api?module=account&action=tokentx&contractaddress=${USDC_CONTRACT}&address=${address}&apikey=${API_KEY}`)
@@ -45,7 +45,6 @@ app.get('/api/check-wallet', async (req, res) => {
       allocation: allocation.toLocaleString(),
       stats: { txCount, ethVolume, usdcVolume, contracts }
     });
-
   } catch (error) {
     console.error("Server Error:", error);
     res.status(500).json({ error: "Server error fetching on-chain data" });
